@@ -1,0 +1,66 @@
+name: Install VulkanSDK
+
+inputs:
+  version:
+    required: true
+    description: The version of the VulkanSDK to build. use 'latest' to use the live development option.
+
+runs:
+  using: 'composite'
+
+  steps:
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ${{github.workspace}}/gtest
+          ${{github.workspace}}/vk_cache
+        key: __${{runner.os}}vulkan${{inputs.version}}_
+        restore-keys: |
+          __${{runner.os}}vulkan__
+          __vulkan__
+
+    - name: Install Dependencies
+      shell: bash
+      run: |
+        if [[ $RUNNER_OS == "Linux" ]]; then
+          sudo apt install build-essentials
+        fi
+
+
+    - name: Build Directory Structure
+      shell: bash
+      run: |
+        cd ${{ github.workspace }}
+        if [[ ! -d "vk_cache" ]]
+          mkdir vk_cache
+        fi
+        cd vk_cache
+        if [[ ! -d "build" ]]
+          mkdir build
+        fi
+        if [[ ! -d "install" ]]
+          mkdir build
+        fi
+        cd build
+        if [[ ! -d "gtest" ]]
+          mkdir build
+        fi
+        if [[ ! -d "headers" ]]
+          mkdir build
+        fi
+
+    - name: Clone and build GTest
+      shell: bash
+      run: |
+        cd ${{ github.workspace }}
+        if {{ ! -d "gtest" }}
+          git clone https://github.com/google/googletest gtest
+        else
+          cd gtest
+          git pull
+          cd ..
+        fi
+        cmake -Sgtest -Bvk_cache/build/gtest -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
+        cmake --build vk_cache/build/gtest --target install
+
+    
