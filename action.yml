@@ -77,8 +77,8 @@ runs:
           git pull
           cd ..
         fi
-        cmake -Srrhash -Bvk_cache/build/rrhash -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
-        cmake --build vk_cache/build/rrhash --target install
+        cmake -Srrhash -Bvk_cache/build/rrhash -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        sudo cmake --build vk_cache/build/rrhash --target install
         if [[ $RUNNER_OS == "Linux" ]]; then
           xcopy ${{github.workspace}}/rrhash/src/include ${{github.workspace}}/vulkan/Include
         else
