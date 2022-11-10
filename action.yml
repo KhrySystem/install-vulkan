@@ -79,7 +79,7 @@ runs:
         fi
         cmake -Srrhash -Bvk_cache/build/rrhash -DCMAKE_BUILD_TYPE=RelWithDebInfo
         sudo cmake --build vk_cache/build/rrhash --target install
-        if [[ $RUNNER_OS == "Linux" ]]; then
+        if [[ $RUNNER_OS != "Linux" ]]; then
           xcopy ${{github.workspace}}/rrhash/src/include ${{github.workspace}}/vulkan/Include
         else
           rsync -a ${{github.workspace}}/rrhash/src/include /usr/local/include
@@ -97,24 +97,12 @@ runs:
         fi
         cmake -Svk_headers -Bbuild/vk_headers -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
         cmake --build build/vk_headers --target install
-        if [[ $RUNNER_OS == "Linux" ]]; then
+        if [[ $RUNNER_OS != "Linux" ]]; then
           xcopy ${{github.workspace}}/vk_cache/vk_headers/include ${{github.workspace}}:vk_cache/vulkan/Include
         else
           rsync -a ${{github.workspace}}/vk_cache/vk_headers/include /usr/local/include
         fi
-    - name: Clone and Build SPIRV-Headers
-      shell: bash
-      run: |
-        cd ${{ github.workspace }}/vk_cache
-        if [[ ! -d "spv_headers" ]]; then
-          git clone https://github.com/KhronosGroup/Vulkan-Headers spv_headers
-        else
-          cd spv_headers
-          git pull
-          cd ..
-        fi
-        cmake -Sspv_headers -Bbuild/spv_headers -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
-        cmake --build build/spv_headers --target install
+    #- name: Clone and Build SPIRV-Headers
     #- name: Clone and Build SPIRV-Tools
     #- name: Clone and Build glslang
     #- name: Clone and Build Vulkan-Loader
