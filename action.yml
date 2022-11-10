@@ -23,8 +23,7 @@ runs:
       shell: bash
       run: |
         if [[ $RUNNER_OS == "Linux" ]]; then
-        echo "Installing Dependencies"
-          sudo apt install build-essentials
+          echo "Installing Dependencies"
         fi
 
 
