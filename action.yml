@@ -31,22 +31,22 @@ runs:
       shell: bash
       run: |
         cd ${{ github.workspace }}
-        if [[ ! -d "vk_cache" ]]
+        if [[ ! -d "vk_cache" ]]; then
           echo "Creating vk_cache directory"
           mkdir vk_cache
         fi
         cd vk_cache
-        if [[ ! -d "build" ]]
+        if [[ ! -d "build" ]]; then
           mkdir build
         fi
-        if [[ ! -d "install" ]]
+        if [[ ! -d "install" ]]; then
           mkdir build
         fi
         cd build
-        if [[ ! -d "gtest" ]]
+        if [[ ! -d "gtest" ]]; then
           mkdir build
         fi
-        if [[ ! -d "headers" ]]
+        if [[ ! -d "headers" ]]; then
           mkdir build
         fi
 
@@ -54,7 +54,7 @@ runs:
       shell: bash
       run: |
         cd ${{ github.workspace }}
-        if {{ ! -d "gtest" }}
+        if [[ ! -d "gtest" ]]; then
           git clone https://github.com/google/googletest gtest
         else
           cd gtest
