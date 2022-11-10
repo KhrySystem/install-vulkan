@@ -59,8 +59,8 @@ runs:
           git pull
           cd ..
         fi
-        cmake -Sgtest -Bvk_cache/build/gtest -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
-        cmake --build vk_cache/build/gtest --target install
+        cmake -Sgtest -Bvk_cache/build/gtest -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        sudo cmake --build vk_cache/build/gtest --target install
         if [[ $RUNNER_OS == "Linux" ]]; then
           xcopy ${{github.workspace}}/gtest/googletest/include ${{github.workspace}}/vulkan/Include
         else
