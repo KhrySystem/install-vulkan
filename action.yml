@@ -23,6 +23,7 @@ runs:
       shell: bash
       run: |
         if [[ $RUNNER_OS == "Linux" ]]; then
+        echo "Installing Dependencies"
           sudo apt install build-essentials
         fi
 
@@ -32,6 +33,7 @@ runs:
       run: |
         cd ${{ github.workspace }}
         if [[ ! -d "vk_cache" ]]
+          echo "Creating vk_cache directory"
           mkdir vk_cache
         fi
         cd vk_cache
