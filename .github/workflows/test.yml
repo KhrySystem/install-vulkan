@@ -1,5 +1,12 @@
 name: Test Workflow
 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+
 jobs:
   test-linux:
     runs-on: ubuntu-latest
