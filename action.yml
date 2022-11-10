@@ -73,7 +73,7 @@ runs:
           cd ..
         fi
         cmake -Srrhash -Bvk_cache/build/rrhash -DCMAKE_BUILD_TYPE=RelWithDebInfo
-        sudo cmake --build vk_cache/build/rrhash --target install
+        sudo cmake --build vk_cache/build/rrhash --target ALL_BUILD
         
     - name: Clone and Build Vulkan-Headers
       shell: bash
