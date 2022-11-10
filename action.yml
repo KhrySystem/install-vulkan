@@ -61,7 +61,7 @@ runs:
         fi
         cmake -Sgtest -Bvk_cache/build/gtest -DCMAKE_BUILD_TYPE=RelWithDebInfo
         sudo cmake --build vk_cache/build/gtest --target install
-        if [[ $RUNNER_OS == "Linux" ]]; then
+        if [[ $RUNNER_OS != "Linux" ]]; then
           xcopy ${{github.workspace}}/gtest/googletest/include ${{github.workspace}}/vulkan/Include
         else
           rsync -a ${{github.workspace}}/gtest/googletest/include /usr/local/include
