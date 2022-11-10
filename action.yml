@@ -5,6 +5,11 @@ inputs:
     required: true
     description: The version of the VulkanSDK to build. use 'latest' to use the live development option.
 
+  build-tests: 
+    required: false
+    description: Build the tests or not
+    default: OFF
+
 runs:
   using: 'composite'
 
@@ -40,17 +45,10 @@ runs:
           mkdir build
         fi
         if [[ ! -d "install" ]]; then
-          mkdir build
-        fi
-        cd build
-        if [[ ! -d "gtest" ]]; then
-          mkdir build
-        fi
-        if [[ ! -d "headers" ]]; then
-          mkdir build
+          mkdir install
         fi
 
-    - name: Clone and build GTest
+    - name: Clone and Build GTest
       shell: bash
       run: |
         cd ${{ github.workspace }}
@@ -61,7 +59,80 @@ runs:
           git pull
           cd ..
         fi
-        cmake -Sgtest -Bvk_cache/build/gtest -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
+        cmake -Sgtest -Bvk_cache/build/gtest -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
         cmake --build vk_cache/build/gtest --target install
+        if [[ $RUNNER_OS == "Linux" ]]; then
+          xcopy ${{github.workspace}}/gtest/googletest/include ${{github.workspace}}/vulkan/Include
+        else
+          rsync -a ${{github.workspace}}/gtest/googletest/include /usr/local/include
+        fi
+    - name: Clone and Build Robin-Hood-Hashing
+      shell: bash
+      run: |
+        cd ${{ github.workspace }}
+        if [[ ! -d "rrhash" ]]; then
+          git clone https://github.com/martinus/robin-hood-hashing rrhash
+        else
+          cd rrhash
+          git pull
+          cd ..
+        fi
+        cmake -Srrhash -Bvk_cache/build/rrhash -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
+        cmake --build vk_cache/build/rrhash --target install
+        if [[ $RUNNER_OS == "Linux" ]]; then
+          xcopy ${{github.workspace}}/rrhash/src/include ${{github.workspace}}/vulkan/Include
+        else
+          rsync -a ${{github.workspace}}/rrhash/src/include /usr/local/include
+        fi
+    - name: Clone and Build Vulkan-Headers
+      shell: bash
+      run: |
+        cd ${{ github.workspace }}/vk_cache
+        if [[ ! -d "vk_headers" ]]; then
+          git clone https://github.com/KhronosGroup/Vulkan-Headers vk_headers
+        else
+          cd vk_headers
+          git pull
+          cd ..
+        fi
+        cmake -Svk_headers -Bbuild/vk_headers -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
+        cmake --build build/vk_headers --target install
+        if [[ $RUNNER_OS == "Linux" ]]; then
+          xcopy ${{github.workspace}}/vk_cache/vk_headers/include ${{github.workspace}}:vk_cache/vulkan/Include
+        else
+          rsync -a ${{github.workspace}}/vk_cache/vk_headers/include /usr/local/include
+        fi
+    - name: Clone and Build SPIRV-Headers
+      shell: bash
+      run: |
+        cd ${{ github.workspace }}/vk_cache
+        if [[ ! -d "spv_headers" ]]; then
+          git clone https://github.com/KhronosGroup/Vulkan-Headers spv_headers
+        else
+          cd spv_headers
+          git pull
+          cd ..
+        fi
+        cmake -Sspv_headers -Bbuild/spv_headers -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
+        cmake --build build/spv_headers --target install
+    - name: Clone and Build SPIRV-Tools
+    - name: Clone and Build glslang
+    - name: Clone and Build Vulkan-Loader
+    - name: Clone and Build Vulkan-ValidationLayers
 
-    
+    - name: Clone and Build MoltenVK
+
+    - name: Clone and Build Vulkan-Tools
+
+    - name: Clone and Build Vulkan-Hpp
+
+    - name: Clone and Build Vulkan-ExtensionLayer
+
+
+    - name: Clone and Build SPIRV-Reflect
+
+    - name: Clone and Build Vulkan-MemoryModel
+
+
+
+    - name: Clone and Build SPIRV-Cross
