@@ -115,24 +115,14 @@ runs:
         fi
         cmake -Sspv_headers -Bbuild/spv_headers -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
         cmake --build build/spv_headers --target install
-    - name: Clone and Build SPIRV-Tools
-    - name: Clone and Build glslang
-    - name: Clone and Build Vulkan-Loader
-    - name: Clone and Build Vulkan-ValidationLayers
-
-    - name: Clone and Build MoltenVK
-
-    - name: Clone and Build Vulkan-Tools
-
-    - name: Clone and Build Vulkan-Hpp
-
-    - name: Clone and Build Vulkan-ExtensionLayer
-
-
-    - name: Clone and Build SPIRV-Reflect
-
-    - name: Clone and Build Vulkan-MemoryModel
-
-
-
-    - name: Clone and Build SPIRV-Cross
+    #- name: Clone and Build SPIRV-Tools
+    #- name: Clone and Build glslang
+    #- name: Clone and Build Vulkan-Loader
+    #- name: Clone and Build Vulkan-ValidationLayers
+    #- name: Clone and Build MoltenVK
+    #- name: Clone and Build Vulkan-Tools
+    #- name: Clone and Build Vulkan-Hpp
+    #- name: Clone and Build Vulkan-ExtensionLayer
+    #- name: Clone and Build SPIRV-Reflect
+    #- name: Clone and Build Vulkan-MemoryModel
+    #- name: Clone and Build SPIRV-Cross
