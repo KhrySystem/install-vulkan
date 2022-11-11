@@ -5,11 +5,6 @@ inputs:
     required: true
     description: The version of the VulkanSDK to build. use 'latest' to use the live development option.
 
-  build-tests: 
-    required: false
-    description: Build the tests or not
-    default: OFF
-
 runs:
   using: 'composite'
 
@@ -87,8 +82,24 @@ runs:
           git pull
           cd ..
         fi
-        cmake -Sspv_tools -Bbuild/spv_tools -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSPIRV_BUILD_FUZZER=ON -DSPIRV_SKIP_TESTS=ON -DSPIRV-Headers_SOURCE_DIR=${{github.workspace}}/vk_cache/spv_headers
+        cmake -Sspv_tools -Bbuild/spv_tools -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSPIRV_SKIP_TESTS=ON -DSPIRV-Headers_SOURCE_DIR=${{github.workspace}}/vk_cache/spv_headers
         sudo cmake --build build/spv_tools --target install
+
+    - name: Clone and Build SPIRV-Reflect
+      shell: bash
+      run: |
+        cd ${{ github.workspace }}/vk_cache
+        if [[ ! -d "spv_tools" ]]; then
+          git clone https://github.com/KhronosGroup/SPIRV-Reflect spv_reflect
+          git clone --depth=1 --branch v3.13.0.1 https://github.com/protocolbuffers/protobuf spv_reflect/external/protobuf
+        else
+          cd spv_reflect
+          git pull
+        fi
+        git submodule update --init
+        cd ..
+        cmake -Sspv_reflect -Bbuild/spv_reflect -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSPIRV-Headers_SOURCE_DIR=${{github.workspace}}/vk_cache/spv_headers
+        sudo cmake --build build/spv_reflect --target install
 
     - name: Clone and Build Vulkan-Headers
       shell: bash
@@ -111,6 +122,5 @@ runs:
     #- name: Clone and Build Vulkan-Tools
     #- name: Clone and Build Vulkan-Hpp
     #- name: Clone and Build Vulkan-ExtensionLayer
-    #- name: Clone and Build SPIRV-Reflect
     #- name: Clone and Build Vulkan-MemoryModel
     #- name: Clone and Build SPIRV-Cross
