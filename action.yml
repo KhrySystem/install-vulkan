@@ -102,7 +102,27 @@ runs:
         fi
         cmake -Sspv_headers -Bbuild/spv_headers -DCMAKE_BUILD_TYPE=RelWithDebInfo
         sudo cmake --build build/spv_headers --target install
-    #- name: Clone and Build SPIRV-Tools
+
+    - name: Clone and Build SPIRV-Tools
+    shell: bash
+      run: |
+        cd ${{ github.workspace }}/vk_cache
+        if [[ ! -d "spv_tools" ]]; then
+          git clone https://github.com/KhronosGroup/SPIRV-Tools spv_tools
+          git clone https://github.com/google/effcee spv_tools/external/effcee
+          git clone https://github.com/google/re2 spv_tools/external/re2
+        else
+          cd spv_tools
+          git pull
+          cd external/effcee
+          git pull
+          cd ../re2
+          git pull
+          cd ../..
+        fi
+        cmake -Sspv_tools -Bbuild/spv_tools -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSPIRV_BUILD_FUZZER=ON
+        sudo cmake --build build/spv_tools --target install
+
     #- name: Clone and Build glslang
     #- name: Clone and Build Vulkan-Loader
     #- name: Clone and Build Vulkan-ValidationLayers
