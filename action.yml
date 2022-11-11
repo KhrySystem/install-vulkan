@@ -47,20 +47,6 @@ runs:
           mkdir install
         fi
 
-    - name: Clone and Build GTest
-      shell: bash
-      run: |
-        cd ${{ github.workspace }}
-        if [[ ! -d "gtest" ]]; then
-          git clone https://github.com/google/googletest gtest
-        else
-          cd gtest
-          git pull
-          cd ..
-        fi
-        cmake -Sgtest -Bvk_cache/build/gtest -DCMAKE_BUILD_TYPE=RelWithDebInfo
-        sudo cmake --build vk_cache/build/gtest --target install
-
     - name: Clone and Build Robin-Hood-Hashing
       shell: bash
       run: |
@@ -74,20 +60,6 @@ runs:
         fi
         cmake -Srrhash -Bvk_cache/build/rrhash -DCMAKE_BUILD_TYPE=RelWithDebInfo
         sudo cmake --build vk_cache/build/rrhash
-        
-    - name: Clone and Build Vulkan-Headers
-      shell: bash
-      run: |
-        cd ${{ github.workspace }}/vk_cache
-        if [[ ! -d "vk_headers" ]]; then
-          git clone https://github.com/KhronosGroup/Vulkan-Headers vk_headers
-        else
-          cd vk_headers
-          git pull
-          cd ..
-        fi
-        cmake -Svk_headers -Bbuild/vk_headers -DCMAKE_BUILD_TYPE=RelWithDebInfo
-        sudo cmake --build build/vk_headers --target install
         
     - name: Clone and Build SPIRV-Headers
       shell: bash
@@ -109,20 +81,27 @@ runs:
         cd ${{ github.workspace }}/vk_cache
         if [[ ! -d "spv_tools" ]]; then
           git clone https://github.com/KhronosGroup/SPIRV-Tools spv_tools
-          git clone https://github.com/google/effcee spv_tools/external/effcee
-          git clone https://github.com/google/re2 spv_tools/external/re2
-          git clone --depth=1 --branch v3.13.0.1 https://github.com/protocolbuffers/protobuf spv_tools/external/protobuf
         else
           cd spv_tools
           git pull
-          cd external/effcee
-          git pull
-          cd ../re2
-          git pull
-          cd ../..
+          cd ..
         fi
-        cmake -Sspv_tools -Bbuild/spv_tools -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSPIRV_BUILD_FUZZER=ON -DSPIRV-Headers_SOURCE_DIR=${{github.workspace}}/vk_cache/spv_headers
+        cmake -Sspv_tools -Bbuild/spv_tools -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSPIRV_BUILD_FUZZER=ON -DSPIRV_SKIP_TESTS=ON -DSPIRV-Headers_SOURCE_DIR=${{github.workspace}}/vk_cache/spv_headers
         sudo cmake --build build/spv_tools --target install
+
+    - name: Clone and Build Vulkan-Headers
+      shell: bash
+      run: |
+        cd ${{ github.workspace }}/vk_cache
+        if [[ ! -d "vk_headers" ]]; then
+          git clone https://github.com/KhronosGroup/Vulkan-Headers vk_headers
+        else
+          cd vk_headers
+          git pull
+          cd ..
+        fi
+        cmake -Svk_headers -Bbuild/vk_headers -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        sudo cmake --build build/vk_headers --target install
 
     #- name: Clone and Build glslang
     #- name: Clone and Build Vulkan-Loader
