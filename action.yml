@@ -95,9 +95,10 @@ runs:
         else
           cd spv_reflect
           git pull
+          cd external/protobuf
         fi
         git submodule update --init
-        cd ..
+        cd ../../..
         cmake -Sspv_reflect -Bbuild/spv_reflect -DCMAKE_BUILD_TYPE=RelWithDebInfo
         sudo cmake --build build/spv_reflect --target install
 
