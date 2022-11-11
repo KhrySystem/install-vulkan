@@ -108,7 +108,7 @@ runs:
       run: |
         cd ${{ github.workspace }}/vk_cache
         if [[ ! -d "spv_cross" ]]; then
-          git clone https://github.com/KhronosGroup/SPIRV-Cross
+          git clone https://github.com/KhronosGroup/SPIRV-Cross spv_cross
         else
           cd spv_cross
           git pull
@@ -116,6 +116,21 @@ runs:
         fi
         cmake -Sspv_cross -Bbuild/spv_cross -DCMAKE_BUILD_TYPE=RelWithDebInfo
         sudo cmake --build build/spv_cross --target install
+
+    - name: Clona and Build GLSLang
+      shell: bash
+      run: |
+        cd ${{ github.workspace }}/vk_cache
+        if [[ ! -d "glslang" ]]; then
+          git clone https://github.com/KhronosGroup/glslang
+          git clone --branch 0c400f67fcf305869c5fb113dd296eca266c9725 https://github.com/google/googletest glslang/External/googletest
+        else
+          cd glslang
+          git pull
+          cd ..
+        fi
+        cmake -Sglslang -Bbuild/glslang -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        sudo cmake --build build/glslang --target install
 
     - name: Clone and Build Vulkan-Headers
       shell: bash
