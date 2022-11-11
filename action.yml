@@ -104,7 +104,7 @@ runs:
         sudo cmake --build build/spv_headers --target install
 
     - name: Clone and Build SPIRV-Tools
-    shell: bash
+      shell: bash
       run: |
         cd ${{ github.workspace }}/vk_cache
         if [[ ! -d "spv_tools" ]]; then
