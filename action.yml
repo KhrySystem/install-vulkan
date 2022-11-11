@@ -123,12 +123,15 @@ runs:
         cd ${{ github.workspace }}/vk_cache
         if [[ ! -d "glslang" ]]; then
           git clone https://github.com/KhronosGroup/glslang
-          git clone --branch 0c400f67fcf305869c5fb113dd296eca266c9725 https://github.com/google/googletest glslang/External/googletest
+          git clone https://github.com/google/googletest glslang/External/googletest
         else
           cd glslang
           git pull
           cd ..
         fi
+        cd glslang/External/googletest
+        git checkout 0c400f67fcf305869c5fb113dd296eca266c9725
+        cd ../../..
         cmake -Sglslang -Bbuild/glslang -DCMAKE_BUILD_TYPE=RelWithDebInfo
         sudo cmake --build build/glslang --target install
 
