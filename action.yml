@@ -92,6 +92,7 @@ runs:
         if [[ ! -d "spv_reflect" ]]; then
           git clone https://github.com/KhronosGroup/SPIRV-Reflect spv_reflect
           git clone --depth=1 --branch v3.13.0.1 https://github.com/protocolbuffers/protobuf spv_reflect/external/protobuf
+          cd spv_reflect/external/protobuf
         else
           cd spv_reflect
           git pull
@@ -101,6 +102,20 @@ runs:
         cd ../../..
         cmake -Sspv_reflect -Bbuild/spv_reflect -DCMAKE_BUILD_TYPE=RelWithDebInfo
         sudo cmake --build build/spv_reflect --target install
+
+    - name: Clone and Build SPIRV-Cross
+      shell: bash
+      run: |
+        cd ${{ github.workspace }}/vk_cache
+        if [[ ! -d "spv_cross" ]]; then
+          git clone https://github.com/KhronosGroup/SPIRV-Cross
+        else
+          cd spv_cross
+          git pull
+          cd ..
+        fi
+        cmake -Sspv_cross -Bbuild/spv_cross -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        sudo cmake --build build/spv_cross --target install
 
     - name: Clone and Build Vulkan-Headers
       shell: bash
@@ -124,4 +139,4 @@ runs:
     #- name: Clone and Build Vulkan-Hpp
     #- name: Clone and Build Vulkan-ExtensionLayer
     #- name: Clone and Build Vulkan-MemoryModel
-    #- name: Clone and Build SPIRV-Cross
+  
