@@ -111,7 +111,7 @@ runs:
           git clone https://github.com/KhronosGroup/SPIRV-Tools spv_tools
           git clone https://github.com/google/effcee spv_tools/external/effcee
           git clone https://github.com/google/re2 spv_tools/external/re2
-          git clone https://github.com/protocolbuffers/protobuf spv_tools/external/protobuf
+          git clone --depth=1 --branch v3.13.0.1 https://github.com/protocolbuffers/protobuf spv_tools/external/protobuf
         else
           cd spv_tools
           git pull
