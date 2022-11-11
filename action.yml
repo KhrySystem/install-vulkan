@@ -120,7 +120,7 @@ runs:
           git pull
           cd ../..
         fi
-        cmake -Sspv_tools -Bbuild/spv_tools -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSPIRV_BUILD_FUZZER=ON
+        cmake -Sspv_tools -Bbuild/spv_tools -DCMAKE_BUILD_TYPE=RelWithDebInfo -DSPIRV_BUILD_FUZZER=ON -DSPIRV-Headers_SOURCE_DIR=${{github.workspace}}/vk_cache/spv_headers
         sudo cmake --build build/spv_tools --target install
 
     #- name: Clone and Build glslang
