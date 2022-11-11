@@ -81,6 +81,7 @@ runs:
         cd ${{ github.workspace }}/vk_cache
         if [[ ! -d "spv_tools" ]]; then
           git clone https://github.com/KhronosGroup/SPIRV-Tools spv_tools
+          git clone --depth=1 --branch v3.13.0.1 https://github.com/protocolbuffers/protobuf spv_tools/external/protobuf
         else
           cd spv_tools
           git pull
