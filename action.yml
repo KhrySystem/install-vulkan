@@ -86,10 +86,22 @@ runs:
           git pull
           cd ..
         fi
-        cmake -Svk_headers -Bbuild/vk_headers -DCMAKE_INSTALL_DIR=${{github.workspace}}/vk_cache/install
-        cmake --build build/vk_headers --target install
+        cmake -Svk_headers -Bbuild/vk_headers -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        sudo cmake --build build/vk_headers --target install
         
-    #- name: Clone and Build SPIRV-Headers
+    - name: Clone and Build SPIRV-Headers
+      shell: bash
+      run: |
+        cd ${{ github.workspace }}/vk_cache
+        if [[ ! -d "spv_headers" ]]; then
+          git clone https://github.com/KhronosGroup/SPIRV-Headers spv_headers
+        else
+          cd spv_headers
+          git pull
+          cd ..
+        fi
+        cmake -Sspv_headers -Bbuild/spv_headers -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        sudo cmake --build build/spv_headers --target install
     #- name: Clone and Build SPIRV-Tools
     #- name: Clone and Build glslang
     #- name: Clone and Build Vulkan-Loader
