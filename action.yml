@@ -24,6 +24,7 @@ runs:
       run: |
         if [[ $RUNNER_OS == "Linux" ]]; then
           echo "Installing Dependencies"
+          sudo apt install git build-essential libx11-xcb-dev libxkbcommon-dev libwayland-dev libxrandr-dev libegl1-mesa-dev libx11-dev
         fi
 
     - name: Build Directory Structure
@@ -130,11 +131,24 @@ runs:
         fi
         cmake -Svk_loader -Bbuild/vk_loader -DCMAKE_BUILD_TYPE=RelWithDebInfo
         sudo cmake --build build/vk_loader --target install
+
+      - name: Clone and Build Vulkan-ExtensionLayer
+        shell: bash
+        run: |
+          cd ${{github.workspace}}
+          if [[ ! -d "vk_extension" ]]; then
+            git clone https://github.com/KhronosGroup/Vulkan-ExtensionLayer vk_extension
+          else
+            cd vk_extension
+            git pull 
+            cd ..
+          fi
+          cmake -Svk_extension -Bbuild/vk_extension -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          sudo cmake --build build/vk_extension --target install
         
     #- name: Clone and Build Vulkan-ValidationLayers
     #- name: Clone and Build MoltenVK
     #- name: Clone and Build Vulkan-Tools
     #- name: Clone and Build Vulkan-Hpp
-    #- name: Clone and Build Vulkan-ExtensionLayer
     #- name: Clone and Build Vulkan-MemoryModel
   
