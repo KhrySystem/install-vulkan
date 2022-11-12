@@ -132,19 +132,19 @@ runs:
         cmake -Svk_loader -Bbuild/vk_loader -DCMAKE_BUILD_TYPE=RelWithDebInfo
         sudo cmake --build build/vk_loader --target install
 
-      - name: Clone and Build Vulkan-ExtensionLayer
-        shell: bash
-        run: |
-          cd ${{github.workspace}}
-          if [[ ! -d "vk_extension" ]]; then
-            git clone https://github.com/KhronosGroup/Vulkan-ExtensionLayer vk_extension
-          else
-            cd vk_extension
-            git pull 
-            cd ..
-          fi
-          cmake -Svk_extension -Bbuild/vk_extension -DCMAKE_BUILD_TYPE=RelWithDebInfo
-          sudo cmake --build build/vk_extension --target install
+    - name: Clone and Build Vulkan-ExtensionLayer
+      shell: bash
+      run: |
+        cd ${{github.workspace}}
+        if [[ ! -d "vk_extension" ]]; then
+          git clone https://github.com/KhronosGroup/Vulkan-ExtensionLayer vk_extension
+        else
+          cd vk_extension
+          git pull 
+          cd ..
+        fi
+        cmake -Svk_extension -Bbuild/vk_extension -DCMAKE_BUILD_TYPE=RelWithDebInfo
+        sudo cmake --build build/vk_extension --target install
         
     #- name: Clone and Build Vulkan-ValidationLayers
     #- name: Clone and Build MoltenVK
