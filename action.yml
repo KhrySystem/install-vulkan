@@ -122,14 +122,14 @@ runs:
       run: |
         cd ${{ github.workspace }}/vk_cache
         if [[ ! -d "vk_loader" ]]; then
-          git clone https://github.com/KhronosGroup/Vulkan-Loader vk_loadef
+          git clone https://github.com/KhronosGroup/Vulkan-Loader vk_loader
         else
           cd vk_loader
           git pull
           cd ..
         fi
         cmake -Svk_loader -Bbuild/vk_loader -DCMAKE_BUILD_TYPE=RelWithDebInfo
-        sudo cmake --build build/vk_loaded --target install
+        sudo cmake --build build/vk_loader --target install
         
     #- name: Clone and Build Vulkan-ValidationLayers
     #- name: Clone and Build MoltenVK
