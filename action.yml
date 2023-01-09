@@ -1,4 +1,5 @@
 name: Install VulkanSDK
+description: Instal VulkanSDK and its dependencies into repo
 
 inputs:
   version:
@@ -143,8 +144,8 @@ runs:
           git pull 
           cd ..
         fi
-        cmake -Svk_extension -Bbuild/vk_extension -DCMAKE_BUILD_TYPE=RelWithDebInfo
-        sudo cmake --build build/vk_extension --target install
+        cmake -Svk_extension -Bbuild/vk_extension -DCMAKE_BUILD_TYPE=RelWithDebInfo -DVULKAN_HEADERS_INSTALL_DIR=${{ github.workspace }}/vk_cache/build/vk_headers -DGLSLANG_INSTALL_DIR=${{ github.workspace }}/vk_cache/build/glslang -DSPIRV_HEADERS_INSTALL_DIR=${{ github.workspace }}/vk_cache/build/spv_headers -DSPIRV_TOOLS_INSTALL_DIR=${{ github.workspace }}/vk_cache/build/spv_tools
+        sudo cmake --build build/vk_extension  --target install
         
     #- name: Clone and Build Vulkan-ValidationLayers
     #- name: Clone and Build MoltenVK
